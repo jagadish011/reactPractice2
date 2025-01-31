@@ -137,7 +137,7 @@ const ProductsTable = () => {
               <td style={{ border: '1px solid #ddd', padding: '8px' }}><button onClick={()=> handleView(selectedProduct.id)} style={{ padding: '8px 16px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>View Details</button></td>
             </tr>
           ) : (
-            products.map((product) => (
+            paginationProducts.map((product) => (
               <tr key={product.id}>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.id}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.title}</td>
@@ -168,6 +168,30 @@ const ProductsTable = () => {
           )}
         </tbody>
       </table>
+
+      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+        <button onClick={handlePrev} disabled={currentPage === 1} style={{
+            padding: '8px 12px',
+            background: currentPage === 1 ? '#ccc' : '#007bff',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+          }}>
+          previous
+        </button>
+        <span style={{ fontSize: '16px', fontWeight: 'bold' }}>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button onClick={handleNext} disabled={currentPage === totalPages} style={{ padding: '8px 12px',
+            background: currentPage === totalPages ? '#ccc' : '#007bff',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',}}>
+          Next
+        </button>
+      </div>
     </div>
   )
 }
