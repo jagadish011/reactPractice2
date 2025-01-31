@@ -10,8 +10,26 @@ const ProductsTable = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  
   const productsPerPage = 5;
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const paginationTable  = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const handleNext = () => {
+    if(currentPage < totalPages){
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  
+  const handlePrev = () => {
+    if(currentPage > 1){
+      setCurrentPage(currentPage - 1);
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -56,23 +74,6 @@ const ProductsTable = () => {
     navigate(`/productDetail/${id}`);
   }
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const paginationProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
-  const handleNext = () => {
-    if(currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if(currentPage > 1){
-      setCurrentPage(currentPage - 1);
-    }
-  }
 
   if (loading) {
     return <div style={{ textAlign: 'center', marginTop: '50px' }}>Loading.......</div>
@@ -137,7 +138,7 @@ const ProductsTable = () => {
               <td style={{ border: '1px solid #ddd', padding: '8px' }}><button onClick={()=> handleView(selectedProduct.id)} style={{ padding: '8px 16px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>View Details</button></td>
             </tr>
           ) : (
-            paginationProducts.map((product) => (
+            paginationTable.map((product) => (
               <tr key={product.id}>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.id}</td>
                 <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.title}</td>
@@ -180,7 +181,7 @@ const ProductsTable = () => {
           }}>
           previous
         </button>
-        <span style={{ fontSize: '16px', fontWeight: 'bold' }}>
+        <span style={{ fontSize: '16px', fontWeight: 'bold', marginTop: '4px' }}>
           Page {currentPage} of {totalPages}
         </span>
         <button onClick={handleNext} disabled={currentPage === totalPages} style={{ padding: '8px 12px',
@@ -192,6 +193,7 @@ const ProductsTable = () => {
           Next
         </button>
       </div>
+      
     </div>
   )
 }
