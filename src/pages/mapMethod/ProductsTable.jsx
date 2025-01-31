@@ -9,6 +9,9 @@ const ProductsTable = () => {
   const [search, setSearch] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 5;
+
 
   const navigate = useNavigate();
 
@@ -51,6 +54,24 @@ const ProductsTable = () => {
 
   const handleView = (id) => {
     navigate(`/productDetail/${id}`);
+  }
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const paginationProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const handleNext = () => {
+    if(currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if(currentPage > 1){
+      setCurrentPage(currentPage - 1);
+    }
   }
 
   if (loading) {
