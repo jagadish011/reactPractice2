@@ -6,6 +6,7 @@ import ProductsTable from './pages/mapMethod/ProductsTable'
 import ImageCarousel from './pages/carousel/ImageCarousel'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ProductDetails from './pages/mapMethod/ProductDetails'
+import Accordion from './pages/Accordion/Accordion'
 
 
 
@@ -21,6 +22,7 @@ const App = () => {
           {/* <ImageCarousel /> */}
           <Route path='/' element = {<ProductsTable />} />
           <Route path='/productDetail/:id' element = {<ProductDetails />} />
+          <Route path='/accordin' element= {<Accordion />} />
         </Routes>
       </div>
     </Router>
