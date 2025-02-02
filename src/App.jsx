@@ -9,6 +9,7 @@ import ProductDetails from './pages/mapMethod/ProductDetails'
 import Accordion from './pages/Accordion/Accordion'
 import Contact from './pages/ContactForm/Contact'
 import Tabs from './pages/Tabs/Tabs'
+import Dice from './pages/Dice/Dice'
 
 
 
@@ -28,7 +29,7 @@ const App = () => {
           <Route path='/accordin' element= {<Accordion />} />
           <Route path='/contact' element = {<Contact />} />
           <Route path='/tabs' element = {<Tabs />} />
-          
+          <Route path='/dice' element = {<Dice />} />
         </Routes>
       </div>
     </Router>
