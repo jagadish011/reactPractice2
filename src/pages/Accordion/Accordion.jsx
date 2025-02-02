@@ -1,48 +1,41 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const Accordion = () => {
-    const content = [
-        {
-            title: "HTML",
-            content: "HTML is a markup language that is used to create the structure of a webpage."
-        },
-        {
-            title: "CSS",
-            content: "CSS is a styling language that is used to style the structure created with HTML."
-        },
-        {
-            title: "JavaScript",
-            content: "JavaScript is a programming language that is used to add interactivity to a webpage."
-        }
-    ]
+  const [openIndex, setOpenIndex] = useState(null);
 
-    const [activeIndex, setActiveIndex] = useState(null)
-
-    const toggleActiveIndex = (index) => {
-        if (activeIndex === index){
-            setActiveIndex(null)
-        }
-        else {
-            setActiveIndex(index)
-        }
+  const toggle = (index) => {
+    if (openIndex === index) {
+      setOpenIndex(null);
+    } else {
+      setOpenIndex(index);
     }
+  };
+
+  const sections = [
+    { title: "Section 1", content: "This is the content for section 1." },
+    { title: "Section 2", content: "This is the content for section 2." },
+    { title: "Section 3", content: "This is the content for section 3." },
+  ];
+
   return (
-    <div className='w-96 mx-auto mt-10'>Accordion</div>
-    {content.map((item, index) => (
-        <div key={index} className='border border-gray-200 rounded-lg mt-4'>
-            <button onClick={() => toggleActiveIndex(index)} className='w-full p-4 text-left bg-gray-100 hover:bg-gray-200'>
-                {item.title}
-            </button>
-
-            {activeIndex == index && (
-                <div>
-                    <p className='p-4'>{item.content}</p>
-                </div>
-            )}
+    <div className="w-80 mx-auto mt-6 font-sans">
+      {sections.map((section, index) => (
+        <div key={index} className="border border-gray-300 mb-2 rounded">
+          <div
+            className="p-3 bg-gray-200 cursor-pointer flex justify-between items-center"
+            onClick={() => toggle(index)}
+          >
+            <span>{section.title}</span>
+            {openIndex === index ? <FaChevronUp /> : <FaChevronDown />}
+          </div>
+          {openIndex === index && (
+            <div className="p-3 bg-white">{section.content}</div>
+          )}
         </div>
-    ))}
-  )
-}
+      ))}
+    </div>
+  );
+};
 
-export default Accordion
+export default Accordion;
