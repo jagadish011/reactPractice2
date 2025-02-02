@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ProductDetails from './pages/mapMethod/ProductDetails'
 import Accordion from './pages/Accordion/Accordion'
 import Contact from './pages/ContactForm/Contact'
+import Tabs from './pages/Tabs/Tabs'
+
 
 
 
@@ -15,7 +17,7 @@ const App = () => {
   return (
     <Router>
       <div>
-        <h1>wellcome to practice the react</h1>
+        <h1 className='text-3xl text-center mt-4 font-bold'>Hey You !! Lets practice the ReactJS</h1>
         <Routes>
           {/* <UserList />
       <UserDirectory />
@@ -25,6 +27,8 @@ const App = () => {
           <Route path='/productDetail/:id' element = {<ProductDetails />} />
           <Route path='/accordin' element= {<Accordion />} />
           <Route path='/contact' element = {<Contact />} />
+          <Route path='/tabs' element = {<Tabs />} />
+          
         </Routes>
       </div>
     </Router>
