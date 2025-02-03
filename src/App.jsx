@@ -10,6 +10,7 @@ import Accordion from './pages/Accordion/Accordion'
 import Contact from './pages/ContactForm/Contact'
 import Tabs from './pages/Tabs/Tabs'
 import Dice from './pages/Dice/Dice'
+import ProductsDetails1 from './pages/mapMethod/ProductsDetails1'
 
 
 
@@ -21,6 +22,7 @@ const App = () => {
         <h1 className='text-3xl text-center mt-4 font-bold'>Hey You !! Lets practice the ReactJS</h1>
         <Routes>
           <Route path='/' element = {<ProductsTable />} />
+          <Route path='/productsTable' element = {<ProductsDetails1 />} />
           <Route path='/useList' element={<UserList />} />
           <Route path='/userDirectory' element={<UserDirectory />} />
           <Route path='/userDirectory1' element={<UserDirectory1 />} />

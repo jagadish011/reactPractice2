@@ -127,7 +127,7 @@ const ProductsTable = () => {
                 {selectedProduct.rating.rate % 1 != 0 && (
                   < FaStar style={{ color: 'gold', opacity: 0.5 }} />
                 )}
-                {Array(5 - Math.floor(selectedProduct.rating.rate))
+                {Array(5 - Math.ceil(selectedProduct.rating.rate))
                   .fill()
                   .map((_, i) => (
                     < FaStar key={`empty-${i}`} style={{ color: 'gray', opacity: 0.5 }} />
