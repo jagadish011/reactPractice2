@@ -20,11 +20,11 @@ const App = () => {
       <div>
         <h1 className='text-3xl text-center mt-4 font-bold'>Hey You !! Lets practice the ReactJS</h1>
         <Routes>
-          {/* <UserList />
-      <UserDirectory />
-      <UserDirectory1 /> */}
-          {/* <ImageCarousel /> */}
           <Route path='/' element = {<ProductsTable />} />
+          <Route path='/useList' element={<UserList />} />
+          <Route path='/userDirectory' element={<UserDirectory />} />
+          <Route path='/userDirectory1' element={<UserDirectory1 />} />
+          <Route path='/imageCarousel' element={<ImageCarousel />} />
           <Route path='/productDetail/:id' element = {<ProductDetails />} />
           <Route path='/accordin' element= {<Accordion />} />
           <Route path='/contact' element = {<Contact />} />
