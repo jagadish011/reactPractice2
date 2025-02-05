@@ -1,7 +1,7 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { FaStar } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ProductsTable = () => {
   const [products, setProducts] = useState([]);
@@ -10,192 +10,158 @@ const ProductsTable = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
   const productsPerPage = 5;
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const paginationTable  = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
-  const handleNext = () => {
-    if(currentPage < totalPages){
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  
-  const handlePrev = () => {
-    if(currentPage > 1){
-      setCurrentPage(currentPage - 1);
-    }
-  }
 
   const navigate = useNavigate();
 
-  const fetchProductes = async () => {
+  const fetchProducts = async () => {
     try {
-      const res = await axios.get('https://fakestoreapi.com/products');
-      console.log("Products", res.data);
+      const res = await axios.get("https://fakestoreapi.com/products");
       setProducts(res.data);
-      // setFilteredProducts(res.data);
+      setFilteredProducts(res.data);
+
+      // Extract unique categories
+      const uniqueCategories = ["All", ...new Set(res.data.map((p) => p.category))];
+      setCategories(uniqueCategories);
+
       setLoading(false);
     } catch (error) {
       console.error(error);
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchProductes();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      const result = products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()));
-      console.log("Filtered Products", result);
+      let result = products;
+
+      if (selectedCategory !== "All") {
+        result = result.filter((product) => product.category === selectedCategory);
+      }
+
+      result = result.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()));
+
       setFilteredProducts(result);
-    }, 500)
+    }, 500);
 
     return () => clearTimeout(debounce);
-  }, [search, products])
+  }, [search, products, selectedCategory]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-  }
+  };
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
     setSearch("");
     setFilteredProducts([]);
-  }
+  };
 
   const handleView = (id) => {
     navigate(`/productDetail/${id}`);
-  }
+  };
 
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const paginationTable = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '50px' }}>Loading.......</div>
+    return <div style={{ textAlign: "center", marginTop: "50px" }}>Loading.......</div>;
   }
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h3>Products Table</h3>
-      <input type="text"
-        placeholder='Search by product title'
+
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search by product title"
         value={search}
         onChange={handleSearch}
-        style={{ padding: '8px', border: '1px solid #ccc', borderRadius: '4px', marginBottom: '10px' }}
+        style={{ padding: "8px", border: "1px solid #ccc", borderRadius: "4px", marginBottom: "10px", marginRight: "10px" }}
       />
-      {search && (
-        filteredProducts.map((product) => (
-          <div key={product.id} onClick={() => handleProductClick(product)}>
-            {product.title}
-          </div>
-        ))
-      )}
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+
+      {/* Category Dropdown */}
+      <select value={selectedCategory} onChange={handleCategoryChange} style={{ padding: "8px", border: "1px solid #ccc", borderRadius: "4px", marginBottom: "10px" }}>
+        {categories.map((category, index) => (
+          <option key={index} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
+
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Id</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Product Title</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Category</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Image</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Price</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Rating</th>
-            <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f2f2f2' }}>Action</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Id</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Product Title</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Category</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Image</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Price</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Rating</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px", background: "#f2f2f2" }}>Action</th>
           </tr>
         </thead>
         <tbody>
-          {selectedProduct ? (
-            <tr key={selectedProduct.id}>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{selectedProduct.id}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{selectedProduct.title}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{selectedProduct.category}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>
-                <img src={selectedProduct.image} alt={selectedProduct.title} style={{ maxWidth: '100px' }} />
+          {paginationTable.map((product) => (
+            <tr key={product.id}>
+              <td style={{ border: "1px solid #ddd", padding: "8px", textAlign: "center" }}>{product.id}</td>
+              <td style={{ border: "1px solid #ddd", padding: "8px", textAlign: "center" }}>{product.title}</td>
+              <td style={{ border: "1px solid #ddd", padding: "8px", textAlign: "center" }}>{product.category}</td>
+              <td style={{ border: "1px solid #ddd", padding: "8px", textAlign: "center" }}>
+                <img src={product.image} alt={product.title} style={{ width: "50px", height: "50px" }} />
               </td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>{selectedProduct.price}</td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}>
-                {Array(Math.floor(selectedProduct.rating.rate))
+              <td style={{ border: "1px solid #ddd", padding: "8px", textAlign: "center" }}>${product.price}</td>
+              <td style={{ border: "1px solid #ddd", padding: "8px", textAlign: "center" }}>
+                {Array(Math.floor(product.rating.rate))
                   .fill()
                   .map((_, i) => (
-                    < FaStar key={`full-${i}`} style={{ color: 'gold' }} />
-                  ))
-                }
-                {selectedProduct.rating.rate % 1 != 0 && (
-                  < FaStar style={{ color: 'gold', opacity: 0.5 }} />
-                )}
-                {Array(5 - Math.ceil(selectedProduct.rating.rate))
+                    <FaStar key={`full-${i}`} style={{ color: "yellow" }} />
+                  ))}
+                {product.rating.rate % 1 !== 0 && <FaStar style={{ color: "yellow", opacity: 0.5 }} />}
+                {Array(5 - Math.ceil(product.rating.rate))
                   .fill()
                   .map((_, i) => (
-                    < FaStar key={`empty-${i}`} style={{ color: 'gray', opacity: 0.5 }} />
-                  ))
-                }
-                
+                    <FaStar key={`empty-${i}`} style={{ color: "gray", opacity: 0.5 }} />
+                  ))}
               </td>
-              <td style={{ border: '1px solid #ddd', padding: '8px' }}><button onClick={()=> handleView(selectedProduct.id)} style={{ padding: '8px 16px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>View Details</button></td>
+              <td style={{ border: "1px solid #ddd", padding: "4px" }}>
+                <button onClick={() => handleView(product.id)} style={{ padding: "8px 6px", background: "#007bff", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+                  View Details
+                </button>
+              </td>
             </tr>
-          ) : (
-            paginationTable.map((product) => (
-              <tr key={product.id}>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.id}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.title}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.category}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
-                  <img src={product.image} alt={product.title} style={{ width: '50px', height: '50px' }} />
-                </td>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{product.price}</td>
-                <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>
-                  {Array(Math.floor(product.rating.rate))
-                    .fill()
-                    .map((_, i) => (
-                      <FaStar key={`full-${i}`} style={{ color: 'yellow' }} />
-                    ))}
-                  {product.rating.rate % 1 !== 0 && (
-                    <FaStar key="half" style={{ color: 'yellow', opacity: 0.5 }} />
-                  )}
-                  {Array(Math.floor(5 - product.rating.rate))
-                    .fill()
-                    .map((_, i) => (
-                      <FaStar key={`empty-${i}`} style={{ color: 'gray', opacity: 0.5 }} />
-                    ))
-                  }
-                </td>
-                <td style={{ border: '1px solid #ddd', padding: '4px' }}><button onClick={()=> handleView(product.id)} style={{ padding: '8px 6px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>View Details</button></td>
-              </tr>
-            ))
-          )}
+          ))}
         </tbody>
       </table>
 
-      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-        <button onClick={handlePrev} disabled={currentPage === 1} style={{
-            padding: '8px 12px',
-            background: currentPage === 1 ? '#ccc' : '#007bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-          }}>
-          previous
+      {/* Pagination Controls */}
+      <div style={{ marginTop: "20px", display: "flex", justifyContent: "center", gap: "10px" }}>
+        <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+          Previous
         </button>
-        <span style={{ fontSize: '16px', fontWeight: 'bold', marginTop: '4px' }}>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button onClick={handleNext} disabled={currentPage === totalPages} style={{ padding: '8px 12px',
-            background: currentPage === totalPages ? '#ccc' : '#007bff',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',}}>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
           Next
         </button>
       </div>
-      
     </div>
-  )
-}
+  );
+};
 
-export default ProductsTable
+export default ProductsTable;
