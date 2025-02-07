@@ -11,6 +11,7 @@ import Contact from './pages/ContactForm/Contact'
 import Tabs from './pages/Tabs/Tabs'
 import Dice from './pages/Dice/Dice'
 import ProductsDetails1 from './pages/mapMethod/ProductsDetails1'
+import FileExplorer from './pages/FileExplorer/FileExplorer'
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/contact' element = {<Contact />} />
           <Route path='/tabs' element = {<Tabs />} />
           <Route path='/dice' element = {<Dice />} />
+          <Route path='/fileExplorer' element = {<FileExplorer />} />
         </Routes>
       </div>
     </Router>
