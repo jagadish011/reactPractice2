@@ -34,6 +34,7 @@ const App = () => {
           <Route path='/tabs' element = {<Tabs />} />
           <Route path='/dice' element = {<Dice />} />
           <Route path='/fileExplorer' element = {<FileExplorer />} />
+          <Route path = '/productTable' element={<ProductsTable />} />
         </Routes>
       </div>
     </Router>

@@ -40,7 +40,7 @@ const FileExplorer = () => {
     }
 
     return (
-        <div className='w-2/3 mx-auto mt-6 font-sans border  mb-10 rounded p-5'>
+        <div >
             <h1>File Explorer</h1>
             {data.map((file) => (
                 <div key={file.id}>
